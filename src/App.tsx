@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router";
 import SignIn from "./pages/AuthPages/SignIn";
 import SignUp from "./pages/AuthPages/SignUp";
 import ResetPassword from "./pages/AuthPages/ResetPassword";
@@ -13,6 +13,8 @@ import RoleManagement from "./pages/admin/RoleManagement";
 import UserManagement from "./pages/admin/UserManagement";
 import AuditLog from "./pages/admin/AuditLog";
 import { ToastProvider } from "./context/ToastContext";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
+import PublicRoute from "./components/auth/PublicRoute";
 
 export default function App() {
   return (
@@ -20,9 +22,16 @@ export default function App() {
       <Router>
         <ScrollToTop />
         <Routes>
-          {/* Dashboard Layout */}
-          <Route element={<AppLayout />}>
-            <Route index path="/" element={<Home />} />
+          {/* Root redirect to signin */}
+          <Route index element={<Navigate to="/signin" replace />} />
+
+          {/* Protected Dashboard Layout */}
+          <Route element={
+            <ProtectedRoute>
+              <AppLayout />
+            </ProtectedRoute>
+          }>
+            <Route path="/dashboard" element={<Home />} />
 
             {/* Documents */}
             <Route path="/documents" element={<DocumentsDashboard />} />
@@ -32,14 +41,24 @@ export default function App() {
             <Route path="/admin/roles" element={<RoleManagement />} />
             <Route path="/admin/users" element={<UserManagement />} />
             <Route path="/admin/audit-log" element={<AuditLog />} />
-
-
           </Route>
 
-          {/* Auth Layout */}
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
+          {/* Public Auth Routes */}
+          <Route path="/signin" element={
+            <PublicRoute redirectTo="/dashboard">
+              <SignIn />
+            </PublicRoute>
+          } />
+          <Route path="/signup" element={
+            <PublicRoute redirectTo="/dashboard">
+              <SignUp />
+            </PublicRoute>
+          } />
+          <Route path="/reset-password" element={
+            <PublicRoute redirectTo="/dashboard">
+              <ResetPassword />
+            </PublicRoute>
+          } />
 
           {/* Fallback Route */}
           <Route path="*" element={<NotFound />} />

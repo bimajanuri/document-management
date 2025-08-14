@@ -18,7 +18,7 @@ const navItems: NavItem[] = [
   {
     icon: <GridIcon />,
     name: "Dashboard",
-    path: "/",
+    path: "/dashboard",
   },
   {
     icon: (
@@ -72,8 +72,8 @@ const AppSidebar: React.FC = () => {
 
   const isActive = useCallback(
     (path: string) => {
-      if (path === "/") {
-        return location.pathname === "/";
+      if (path === "/dashboard") {
+        return location.pathname === "/dashboard";
       }
       return location.pathname.startsWith(path);
     },
@@ -231,7 +231,7 @@ const AppSidebar: React.FC = () => {
           {/* Logo */}
           <div className="flex items-center justify-center h-[90px] border-b border-gray-200 dark:border-gray-700">
             {isExpanded || isHovered || isMobileOpen ? (
-              <Link to="/" className="flex items-center">
+              <Link to="/dashboard" className="flex items-center">
                 <img
                   className="block h-8 w-auto dark:hidden"
                   src="/images/logo/logo.svg"
@@ -244,7 +244,7 @@ const AppSidebar: React.FC = () => {
                 />
               </Link>
             ) : (
-              <Link to="/" className="flex items-center">
+              <Link to="/dashboard" className="flex items-center">
                 <img
                   src="/images/logo/logo-icon.svg"
                   alt="Logo"

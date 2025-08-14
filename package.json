@@ -7,7 +7,13 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "npm run build && wrangler pages deploy dist",
+    "deploy:preview": "npm run build && wrangler pages deploy dist --compatibility-date=2024-12-30 --project-name=manadoc-preview",
+    "cf:login": "wrangler auth login",
+    "cf:whoami": "wrangler auth whoami",
+    "cf:pages:list": "wrangler pages project list",
+    "cf:pages:create": "wrangler pages project create manadoc-document-management"
   },
   "dependencies": {
     "@fullcalendar/core": "^6.1.15",
@@ -48,7 +54,8 @@
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.22.0",
     "vite": "^6.1.0",
-    "vite-plugin-svgr": "^4.3.0"
+    "vite-plugin-svgr": "^4.3.0",
+    "wrangler": "^4.29.1"
   },
   "overrides": {
     "react-helmet-async": {

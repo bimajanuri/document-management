@@ -327,6 +327,41 @@ For support and questions:
 - Toast notification system
 - Dark/light theme support
 
+## 🚀 Deployment
+
+### Cloudflare Pages (Recommended)
+
+This project is optimized for deployment on Cloudflare Pages with automatic Git integration.
+
+#### Option 1: Automatic Deployment (Recommended)
+1. Push your code to GitHub/GitLab
+2. Connect your repository to Cloudflare Pages
+3. Use these build settings:
+   - **Build command:** `npm run build`
+   - **Build output directory:** `dist`
+   - **Root directory:** `/`
+
+#### Option 2: Manual Deployment
+```bash
+# Login to Cloudflare
+npm run cf:login
+
+# Deploy to production
+npm run deploy
+
+# Deploy preview
+npm run deploy:preview
+```
+
+For detailed deployment instructions, see [DEPLOYMENT.md](./DEPLOYMENT.md).
+
+### Other Platforms
+The built application in the `dist` folder can be deployed to any static hosting service:
+- Vercel
+- Netlify  
+- GitHub Pages
+- AWS S3 + CloudFront
+
 ---
 
 **Built with ❤️ using ReactJS and Tailwind CSS**
