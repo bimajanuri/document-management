@@ -1,0 +1,6 @@
+<svg width="50" height="50" xmlns="http://www.w3.org/2000/svg">
+    <g transform="translate(5, 5)">
+      <path d="M20 0 L40 20 L20 40 L0 20 Z" fill="#4A90E2"/>
+      <path d="M10 20 L20 30 L30 20 L20 10 Z" fill="#FFFFFF"/>
+    </g>
+  </svg>
