@@ -2,10 +2,10 @@
 name = "manadoc-document-management"
 compatibility_date = "2024-12-30"
 
-# Static assets directory for Pages deployment
+# For Cloudflare Pages, we don't need wrangler.toml configuration
+# Pages uses the build settings from the dashboard
+# This file is kept for manual deployment via wrangler CLI only
+
+# Static assets directory for manual deployment only
 [assets]
 directory = "./dist"
-
-# Environment variables (set these in Cloudflare dashboard if needed)
-# VITE_API_URL = "https://your-api-url.com"
-# VITE_APP_ENV = "production"

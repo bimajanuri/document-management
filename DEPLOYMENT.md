@@ -21,10 +21,12 @@
    Framework preset: Vite
    Build command: npm run build
    Build output directory: dist
-   Root directory: /
+   Root directory: / (leave empty)
    Node.js version: 20
    Environment variables: (none required for basic setup)
    ```
+
+   **⚠️ Important:** Make sure to set the build command to `npm run build` (NOT `npx wrangler deploy`)
 
 3. **Deploy:**
    - Click `Save and Deploy`
@@ -107,9 +109,17 @@ The deployment includes security headers:
 ## 🐛 Troubleshooting
 
 ### Build Fails
-- Check Node.js version (should be 18+)
+- Check Node.js version (should be 20+)
 - Ensure all dependencies are installed: `npm install`
 - Test local build: `npm run build`
+- **Common Issue:** Make sure build command in Cloudflare Dashboard is `npm run build` (NOT `npx wrangler deploy`)
+
+### "Directory does not exist" Error
+This happens when Cloudflare tries to run `wrangler deploy` instead of building first:
+1. Go to your Pages project settings
+2. Change build command from `npx wrangler deploy` to `npm run build`
+3. Set build output directory to `dist`
+4. Redeploy
 
 ### Routing Issues
 - Verify `_redirects` file is in `public/` directory
@@ -118,6 +128,11 @@ The deployment includes security headers:
 ### Authentication Issues
 - Remember that localStorage is used for auth
 - Users will need to login again after deployment
+
+### Wrangler Configuration Issues
+- The `wrangler.toml` file is for manual deployment only
+- Cloudflare Pages uses dashboard build settings, not wrangler.toml
+- If you see wrangler errors, use Git integration instead of manual deployment
 
 ## 📊 Performance
 
