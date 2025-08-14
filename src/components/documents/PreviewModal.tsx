@@ -53,27 +53,20 @@ export default function PreviewModal({ isOpen, onClose, document }: PreviewModal
     <Modal isOpen={isOpen} onClose={onClose} className="max-w-4xl">
       <div className="p-6">
         {/* Header */}
-        <div className="flex items-start justify-between mb-6">
-          <div className="flex items-center gap-4">
-            <div className="p-3 bg-gray-100 rounded-lg dark:bg-gray-800">
-              <svg className="w-8 h-8 text-gray-600 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                <path d={getFileIcon(document.extension)} />
-              </svg>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
-                {document.name}
-              </h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                {document.type} • {formatFileSize(document.size)} • Version {document.version}
-              </p>
-            </div>
-          </div>
-          <Button variant="outline" onClick={onClose} size="sm">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+        <div className="flex items-center gap-4 mb-6">
+          <div className="p-3 bg-gray-100 rounded-lg dark:bg-gray-800">
+            <svg className="w-8 h-8 text-gray-600 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+              <path d={getFileIcon(document.extension)} />
             </svg>
-          </Button>
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
+              {document.name}
+            </h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              {document.type} • {formatFileSize(document.size)} • Version {document.version}
+            </p>
+          </div>
         </div>
 
         {/* Document Info */}

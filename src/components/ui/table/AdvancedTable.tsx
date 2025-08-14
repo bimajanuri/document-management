@@ -247,7 +247,7 @@ export default function AdvancedTable<T = any>({
                       {rowSelection.type !== 'radio' && (
                         <input
                           type="checkbox"
-                          className="rounded border-gray-300 text-brand-600 focus:ring-brand-500"
+                          className="rounded border-gray-300 dark:border-gray-600 text-brand-600 focus:ring-brand-500 dark:bg-gray-700 dark:focus:ring-brand-400"
                           aria-label="Select all rows"
                           onChange={(e) => {
                             const allKeys = paginatedData.map((record, index) => getRowKey(record, index));
@@ -268,7 +268,7 @@ export default function AdvancedTable<T = any>({
                     <TableCell
                       key={column.key}
                       isHeader
-                      className={`font-medium ${column.align === 'center' ? 'text-center' : column.align === 'right' ? 'text-right' : 'text-left'} ${column.sorter ? 'cursor-pointer select-none hover:bg-gray-50 dark:hover:bg-gray-800' : ''}`}
+                      className={`font-medium text-gray-900 dark:text-gray-100 ${column.align === 'center' ? 'text-center' : column.align === 'right' ? 'text-right' : 'text-left'} ${column.sorter ? 'cursor-pointer select-none hover:bg-gray-50 dark:hover:bg-gray-800' : ''}`}
                       style={{ width: column.width }}
                       onClick={() => handleSort(column)}
                     >
@@ -392,7 +392,7 @@ export default function AdvancedTable<T = any>({
                 <select
                   value={pageSize}
                   onChange={(e) => handlePageChange(1, Number(e.target.value))}
-                  className="border border-gray-300 dark:border-gray-600 rounded px-2 py-1 bg-white dark:bg-gray-800"
+                  className="border border-gray-300 dark:border-gray-600 rounded px-2 py-1 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                   aria-label="Select page size"
                 >
                   {(pagination.pageSizeOptions || ['10', '20', '50', '100']).map(size => (
@@ -412,7 +412,7 @@ export default function AdvancedTable<T = any>({
                   type="number"
                   min={1}
                   max={paginationInfo.totalPages}
-                  className="w-16 border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-center bg-white dark:bg-gray-800"
+                  className="w-16 border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-center bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                   aria-label="Go to page number"
                   placeholder="1"
                   onKeyDown={(e) => {

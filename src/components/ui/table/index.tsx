@@ -64,7 +64,11 @@ const TableCell: React.FC<TableCellProps> = ({
   onClick,
 }) => {
   const CellTag = isHeader ? "th" : "td";
-  return <CellTag className={` ${className}`} style={style} colSpan={colSpan} onClick={onClick}>{children}</CellTag>;
+  const baseClasses = isHeader 
+    ? "px-4 py-3 text-left text-sm font-medium text-gray-900 dark:text-gray-100 bg-gray-50 dark:bg-gray-800/50 border-b border-gray-200 dark:border-gray-700" 
+    : "px-4 py-3 text-sm text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-gray-700";
+  
+  return <CellTag className={`${baseClasses} ${className}`} style={style} colSpan={colSpan} onClick={onClick}>{children}</CellTag>;
 };
 
 export { Table, TableHeader, TableBody, TableRow, TableCell };
