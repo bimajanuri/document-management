@@ -18,10 +18,11 @@
 
 2. **Configure Build Settings:**
    ```
-   Framework preset: None (or Vite)
+   Framework preset: Vite
    Build command: npm run build
    Build output directory: dist
    Root directory: /
+   Node.js version: 20
    Environment variables: (none required for basic setup)
    ```
 
@@ -31,6 +32,8 @@
    - Every push to `master` branch will trigger automatic redeployment
 
 ### Option 2: Manual Deployment via Wrangler CLI
+
+**⚠️ Important:** Use Git integration (Option 1) for Cloudflare Pages. Manual deployment is for advanced users only.
 
 1. **Login to Cloudflare:**
    ```bash
