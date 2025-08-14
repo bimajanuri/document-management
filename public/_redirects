@@ -2,13 +2,15 @@
 # All non-asset requests should be redirected to index.html
 # This ensures that client-side routing works properly
 
-# Assets should be served directly (images, fonts, etc.)
+# Static assets should be served directly
 /images/* /images/:splat 200
+/assets/* /assets/:splat 200
 /favicon.ico /favicon.ico 200
 /favicon.png /favicon.png 200
 
 # API routes (if you add backend later)
 # /api/* https://your-api-url.com/api/:splat 200
 
-# All other routes should serve index.html for SPA routing
-/* /index.html 200
+# SPA fallback - serve index.html for all non-asset routes
+# This must be last and use 404 status to avoid infinite loops
+/* /index.html 404
