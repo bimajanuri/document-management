@@ -236,9 +236,13 @@ export default function AdvancedTable<T = any>({
         )}
 
         <div 
-          className={`overflow-auto ${scroll?.x ? 'overflow-x-auto' : ''} ${scroll?.y ? 'overflow-y-auto' : ''}`}
+          className={`mobile-table-scroll ${scroll?.x ? 'overflow-x-auto' : 'overflow-x-auto'} ${scroll?.y ? 'overflow-y-auto' : ''} border border-gray-200 dark:border-gray-700 rounded-lg`}
+          style={{
+            maxHeight: scroll?.y,
+            minWidth: scroll?.x || 'auto'
+          }}
         >
-          <Table className={`${sizeClasses[size]} ${bordered ? 'border' : ''}`}>
+          <Table className={`${sizeClasses[size]} ${bordered ? 'border' : ''} min-w-full whitespace-nowrap`}>
             {showHeader && (
               <TableHeader>
                 <TableRow>

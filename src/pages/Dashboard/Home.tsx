@@ -81,7 +81,7 @@ export default function Home() {
       </div>
 
       {/* System Stats */}
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 sm:gap-6">
         <ComponentCard title="Total Users" className="text-center">
           <div className="text-3xl font-bold text-brand-500">{mockDashboardStats.totalUsers}</div>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">Active accounts</p>
@@ -106,9 +106,9 @@ export default function Home() {
       {/* Admin Management Section */}
       {isAdmin && (
                   <ComponentCard title="Administration" desc="Manage system users and roles">
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 sm:gap-6">
             {/* Role Management Card */}
-            <div className="p-6 border border-gray-200 rounded-lg dark:border-gray-700">
+            <div className="p-4 sm:p-6 border border-gray-200 rounded-lg dark:border-gray-700">
               <div className="flex items-center gap-4 mb-4">
                 <div className="p-3 bg-blue-100 rounded-lg dark:bg-blue-900/20">
                   <svg className="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -131,7 +131,7 @@ export default function Home() {
             </div>
 
                                     {/* User Management Card */}
-                        <div className="p-6 border border-gray-200 rounded-lg dark:border-gray-700">
+                        <div className="p-4 sm:p-6 border border-gray-200 rounded-lg dark:border-gray-700">
                           <div className="flex items-center gap-4 mb-4">
                             <div className="p-3 bg-green-100 rounded-lg dark:bg-green-900/20">
                               <svg className="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -154,7 +154,7 @@ export default function Home() {
                         </div>
 
                         {/* Audit Log Card */}
-                        <div className="p-6 border border-gray-200 rounded-lg dark:border-gray-700">
+                        <div className="p-4 sm:p-6 border border-gray-200 rounded-lg dark:border-gray-700">
                           <div className="flex items-center gap-4 mb-4">
                             <div className="p-3 bg-purple-100 rounded-lg dark:bg-purple-900/20">
                               <svg className="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -181,9 +181,9 @@ export default function Home() {
 
       {/* Quick Actions */}
       <ComponentCard title="Quick Actions" desc="Common tasks and shortcuts">
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 sm:gap-4">
           <Link to="/documents">
-            <Button variant="outline" className="h-auto p-4 flex-col items-start w-full">
+            <Button variant="outline" className="h-auto p-3 sm:p-4 flex-col items-start w-full">
               <svg className="w-6 h-6 text-brand-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
@@ -192,7 +192,7 @@ export default function Home() {
             </Button>
           </Link>
           {mockQuickActions.slice(0, 2).map((action) => (
-            <Button key={action.id} variant="outline" className="h-auto p-4 flex-col items-start">
+            <Button key={action.id} variant="outline" className="h-auto p-3 sm:p-4 flex-col items-start">
               {getQuickActionIcon(action.icon)}
               <span className="font-medium">{action.title}</span>
               <span className="text-sm text-gray-500 dark:text-gray-400">{action.description}</span>
@@ -205,7 +205,7 @@ export default function Home() {
       <ComponentCard title="Recent Activity" desc="Latest system events and updates">
         <div className="space-y-4">
           {mockRecentActivity.map((activity) => (
-            <div key={activity.id} className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg dark:bg-gray-800">
+            <div key={activity.id} className="flex items-center gap-3 sm:gap-4 p-3 bg-gray-50 rounded-lg dark:bg-gray-800">
               {getActivityIcon(activity.icon, activity.color)}
               <div className="flex-1">
                 <p className="text-sm font-medium text-gray-800 dark:text-white/90">{activity.title}</p>
