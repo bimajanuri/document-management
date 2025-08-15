@@ -230,7 +230,7 @@ export default function AuditLog() {
       />
       <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-3 sm:gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-semibold text-gray-800 dark:text-white/90">
             Audit Trail
@@ -239,7 +239,7 @@ export default function AuditLog() {
             Track all system activities and user actions for compliance and security monitoring
           </p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <Button
             variant="outline"
             onClick={clearFilters}
@@ -256,7 +256,7 @@ export default function AuditLog() {
 
       {/* Filters */}
       <ComponentCard title="Filters" desc="Filter audit log entries by date, action, user, or severity">
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 sm:gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Search
@@ -350,7 +350,7 @@ export default function AuditLog() {
           }}
           scroll={{
             x: 1200,
-            y: 600
+            y: 400
           }}
           size="middle"
           bordered={false}

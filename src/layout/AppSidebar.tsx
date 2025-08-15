@@ -218,11 +218,11 @@ const AppSidebar: React.FC = () => {
       <aside
         ref={sidebarRef}
         className={`fixed left-0 top-0 z-50 h-screen transition-all duration-300 ease-in-out ${
-          isExpanded || isHovered ? "w-[290px]" : "w-[90px]"
-        } ${
           isMobileOpen 
-            ? "translate-x-0" 
-            : "max-lg:-translate-x-full"
+            ? "w-[290px] translate-x-0" 
+            : "max-lg:-translate-x-full max-lg:w-[290px]"
+        } ${
+          !isMobileOpen && (isExpanded || isHovered) ? "lg:w-[290px]" : "lg:w-[90px]"
         } bg-white border-r border-gray-200 dark:bg-gray-900 dark:border-gray-700`}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}

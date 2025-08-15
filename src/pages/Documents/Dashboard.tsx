@@ -223,10 +223,10 @@ function DocumentsDashboardContent() {
         title="Documents | ManaDoc - Document Management System"
         description="Manage, upload, and organize your documents with ManaDoc's powerful document management system"
       />
-      <div className="flex gap-6">
+      <div className="flex flex-col lg:flex-row gap-4 lg:gap-6">
       {/* Sidebar - Folder Navigation */}
-      <div className={`flex-shrink-0 transition-all duration-300 ${isNavigationOpen ? 'w-64' : 'w-0'}`}>
-        <div className={`${isNavigationOpen ? 'block' : 'hidden'}`}>
+      <div className={`lg:flex-shrink-0 transition-all duration-300 ${isNavigationOpen ? 'lg:w-64' : 'lg:w-0'} ${isNavigationOpen ? 'block' : 'hidden'}`}>
+        <div>
           <ComponentCard title="Navigation" className="sticky top-4">
             <FolderNavigation
               currentFolderId={currentFolderId}
@@ -274,7 +274,7 @@ function DocumentsDashboardContent() {
 
         {/* Search and Filters */}
         <ComponentCard title="Search & Filters">
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+          <div className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2 xl:grid-cols-4">
             <SearchBar
               value={searchQuery}
               onChange={setSearchQuery}
@@ -282,7 +282,7 @@ function DocumentsDashboardContent() {
               label="Search Documents"
               className="md:col-span-2 xl:col-span-2"
             />
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-2 xl:grid-cols-2 md:col-span-2 xl:col-span-2">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 md:grid-cols-2 xl:grid-cols-2 md:col-span-2 xl:col-span-2">
               <FilterDropdown
                 label="Document Type"
                 value={typeFilter}
@@ -300,13 +300,13 @@ function DocumentsDashboardContent() {
         </ComponentCard>
 
         {/* Tabs */}
-        <div className="flex items-center gap-4">
-          <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+          <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1 w-full sm:w-auto overflow-x-auto">
             {(["all", "recent", "favorites"] as ViewTab[]).map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-md text-sm font-medium transition-colors whitespace-nowrap ${
                   activeTab === tab
                     ? "bg-white dark:bg-gray-700 text-brand-600 dark:text-brand-400 shadow-sm"
                     : "text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"

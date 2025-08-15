@@ -199,7 +199,7 @@ export default function UserManagement() {
       />
       <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-3 sm:gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-semibold text-gray-800 dark:text-white/90">
             User Management
@@ -236,7 +236,7 @@ export default function UserManagement() {
           }}
           scroll={{
             x: 900,
-            y: 500
+            y: 400
           }}
           size="middle"
           bordered={false}

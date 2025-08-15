@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Table, TableHeader, TableBody, TableRow, TableCell } from './index';
 import Button from '../button/Button';
 
@@ -11,6 +11,9 @@ export interface Column<T = any> {
   render?: (value: any, record: T, index: number) => React.ReactNode;
   sorter?: boolean | ((a: T, b: T) => number);
   fixed?: 'left' | 'right';
+  mobileHidden?: boolean; // Hide column on mobile
+  mobileLabel?: string; // Custom label for mobile card view
+  mobilePriority?: number; // Priority for mobile display (1 = highest)
 }
 
 export interface AdvancedTableProps<T = any> {
@@ -56,6 +59,8 @@ export interface AdvancedTableProps<T = any> {
   };
   className?: string;
   emptyText?: string;
+  mobileBreakpoint?: number; // Breakpoint for mobile view (default: 768)
+  enableMobileCards?: boolean; // Enable card layout for mobile (default: true)
 }
 
 export default function AdvancedTable<T = any>({
@@ -74,7 +79,9 @@ export default function AdvancedTable<T = any>({
   rowSelection,
   onRow,
   className = '',
-  emptyText = 'No data'
+  emptyText = 'No data',
+  mobileBreakpoint = 768,
+  enableMobileCards = true
 }: AdvancedTableProps<T>) {
   const [sortConfig, setSortConfig] = useState<{
     key: string;
@@ -83,6 +90,115 @@ export default function AdvancedTable<T = any>({
   const [expandedRows, setExpandedRows] = useState<React.Key[]>([]);
   const [currentPage, setCurrentPage] = useState(pagination ? pagination.current || 1 : 1);
   const [pageSize, setPageSize] = useState(pagination ? pagination.pageSize || 10 : 10);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Mobile detection
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < mobileBreakpoint);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, [mobileBreakpoint]);
+
+  // Get visible columns for mobile
+  const mobileColumns = useMemo(() => {
+    if (!isMobile || !enableMobileCards) return columns;
+    
+    return columns
+      .filter(col => !col.mobileHidden)
+      .sort((a, b) => (a.mobilePriority || 999) - (b.mobilePriority || 999));
+  }, [columns, isMobile, enableMobileCards]);
+
+  // Render mobile card for a single row
+  const renderMobileCard = (record: T, index: number) => {
+    const key = getRowKey(record, index);
+    const isSelected = rowSelection?.selectedRowKeys?.includes(key);
+    const rowProps = onRow?.(record, index) || {};
+
+    return (
+      <div
+        key={key}
+        className={`border border-gray-200 dark:border-gray-700 rounded-lg p-4 mb-3 ${
+          isSelected ? 'bg-brand-50 dark:bg-brand-900/20 border-brand-200 dark:border-brand-800' : 'bg-white dark:bg-gray-800'
+        } ${rowProps.onClick ? 'cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700' : ''}`}
+        {...rowProps}
+      >
+        {/* Selection checkbox */}
+        {rowSelection && (
+          <div className="flex items-center mb-3 pb-3 border-b border-gray-100 dark:border-gray-700">
+            <input
+              type={rowSelection.type || 'checkbox'}
+              className="rounded border-gray-300 dark:border-gray-600 text-brand-600 focus:ring-brand-500 dark:bg-gray-700 dark:focus:ring-brand-400"
+              checked={isSelected}
+              onChange={(e) => {
+                if (e.target.checked) {
+                  const newKeys = [...(rowSelection.selectedRowKeys || []), key];
+                  rowSelection.onChange?.(newKeys, [...(rowSelection.selectedRowKeys || []).map(k => 
+                    paginatedData.find((r, i) => getRowKey(r, i) === k)
+                  ).filter(Boolean), record] as T[]);
+                } else {
+                  const newKeys = (rowSelection.selectedRowKeys || []).filter(k => k !== key);
+                  rowSelection.onChange?.(newKeys, newKeys.map(k => 
+                    paginatedData.find((r, i) => getRowKey(r, i) === k)
+                  ).filter(Boolean) as T[]);
+                }
+              }}
+            />
+            <span className="ml-2 text-sm text-gray-600 dark:text-gray-400">Select item</span>
+          </div>
+        )}
+
+        {/* Card content */}
+        <div className="space-y-2">
+          {mobileColumns.map((column) => {
+            const value = (record as any)[column.dataIndex];
+            const renderedValue = column.render ? column.render(value, record, index) : value;
+            const label = column.mobileLabel || column.title;
+
+            if (value === null || value === undefined || value === '') return null;
+
+            return (
+              <div key={column.key} className="flex flex-col sm:flex-row sm:justify-between">
+                <dt className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1 sm:mb-0">
+                  {label}:
+                </dt>
+                <dd className="text-sm text-gray-900 dark:text-gray-100 sm:text-right">
+                  {renderedValue}
+                </dd>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Expandable content */}
+        {expandable?.expandedRowRender && expandable.rowExpandable?.(record) && (
+          <div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setExpandedRows(prev => 
+                  prev.includes(key) 
+                    ? prev.filter(k => k !== key)
+                    : [...prev, key]
+                );
+              }}
+              className="text-sm text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300 font-medium"
+            >
+              {expandedRows.includes(key) ? 'Show Less' : 'Show More'}
+            </button>
+            {expandedRows.includes(key) && (
+              <div className="mt-2">
+                {expandable.expandedRowRender(record, index)}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  };
 
   // Get row key function
   const getRowKey = (record: T, index: number): React.Key => {
@@ -235,13 +351,33 @@ export default function AdvancedTable<T = any>({
           </div>
         )}
 
-        <div 
-          className={`mobile-table-scroll ${scroll?.x ? 'overflow-x-auto' : 'overflow-x-auto'} ${scroll?.y ? 'overflow-y-auto' : ''} border border-gray-200 dark:border-gray-700 rounded-lg`}
-          style={{
-            maxHeight: scroll?.y,
-            minWidth: scroll?.x || 'auto'
-          }}
-        >
+        {/* Mobile Card View */}
+        {isMobile && enableMobileCards ? (
+          <div className="space-y-3">
+            {paginatedData.length === 0 ? (
+              <div className="text-center py-12 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800">
+                <div className="flex flex-col items-center gap-3">
+                  <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  <div>
+                    <p className="text-gray-500 dark:text-gray-400 font-medium">{emptyText}</p>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              paginatedData.map((record, index) => renderMobileCard(record, index))
+            )}
+          </div>
+        ) : (
+          /* Desktop Table View */
+          <div 
+            className={`mobile-table-scroll ${scroll?.x ? 'overflow-x-auto' : 'overflow-x-auto'} ${scroll?.y ? 'overflow-y-auto' : ''} border border-gray-200 dark:border-gray-700 rounded-lg`}
+            style={{
+              maxHeight: scroll?.y,
+              minWidth: scroll?.x || 'auto'
+            }}
+          >
           <Table className={`${sizeClasses[size]} ${bordered ? 'border' : ''} min-w-full whitespace-nowrap`}>
             {showHeader && (
               <TableHeader>
@@ -381,17 +517,18 @@ export default function AdvancedTable<T = any>({
               )}
             </TableBody>
           </Table>
-        </div>
+          </div>
+        )}
       </div>
 
       {pagination && paginationInfo && (
-        <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-          <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
-            <span>
+        <div className={`${isMobile ? 'flex flex-col gap-4' : 'flex items-center justify-between'} mt-4 pt-4 border-t border-gray-200 dark:border-gray-700`}>
+          <div className={`${isMobile ? 'text-center' : 'flex items-center gap-4'} text-sm text-gray-600 dark:text-gray-400`}>
+            <span className={isMobile ? 'block mb-2' : ''}>
               Showing {paginationInfo.start} to {paginationInfo.end} of {paginationInfo.total} entries
             </span>
             {pagination.showSizeChanger && (
-              <div className="flex items-center gap-2">
+              <div className={`${isMobile ? 'justify-center' : ''} flex items-center gap-2`}>
                 <span>Show</span>
                 <select
                   value={pageSize}
@@ -408,8 +545,8 @@ export default function AdvancedTable<T = any>({
             )}
           </div>
 
-          <div className="flex items-center gap-2">
-            {pagination.showQuickJumper && (
+          <div className={`${isMobile ? 'flex flex-col gap-3' : 'flex items-center gap-2'}`}>
+            {pagination.showQuickJumper && !isMobile && (
               <div className="flex items-center gap-2 mr-4 text-sm text-gray-600 dark:text-gray-400">
                 <span>Go to</span>
                 <input
@@ -432,16 +569,17 @@ export default function AdvancedTable<T = any>({
               </div>
             )}
 
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={currentPage <= 1}
-              onClick={() => handlePageChange(currentPage - 1, pageSize)}
-            >
-              Previous
-            </Button>
-            
-            <div className="flex items-center gap-1">
+            <div className={`${isMobile ? 'flex justify-center' : 'flex items-center'} gap-2`}>
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={currentPage <= 1}
+                onClick={() => handlePageChange(currentPage - 1, pageSize)}
+              >
+                {isMobile ? 'Prev' : 'Previous'}
+              </Button>
+              
+              <div className={`${isMobile ? 'hidden' : 'flex items-center gap-1'}`}>
               {Array.from({ length: Math.min(5, paginationInfo.totalPages) }, (_, i) => {
                 let pageNum;
                 if (paginationInfo.totalPages <= 5) {
@@ -465,16 +603,23 @@ export default function AdvancedTable<T = any>({
                   </Button>
                 );
               })}
-            </div>
+              </div>
 
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={currentPage >= paginationInfo.totalPages}
-              onClick={() => handlePageChange(currentPage + 1, pageSize)}
-            >
-              Next
-            </Button>
+              {isMobile && (
+                <span className="text-sm text-gray-600 dark:text-gray-400">
+                  {currentPage} / {paginationInfo.totalPages}
+                </span>
+              )}
+
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={currentPage >= paginationInfo.totalPages}
+                onClick={() => handlePageChange(currentPage + 1, pageSize)}
+              >
+                Next
+              </Button>
+            </div>
           </div>
         </div>
       )}

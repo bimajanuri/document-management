@@ -92,6 +92,8 @@ export default function DocumentTable({
       dataIndex: 'name',
       width: '22%',
       sorter: (a, b) => a.name.localeCompare(b.name),
+      mobilePriority: 1,
+      mobileLabel: 'Document',
       render: (_, record) => (
         <div className="flex items-center gap-3">
           {getFileIcon(record.extension)}
@@ -133,6 +135,7 @@ export default function DocumentTable({
       dataIndex: 'type',
       width: '8%',
       sorter: (a, b) => a.type.localeCompare(b.type),
+      mobileHidden: true,
       render: (value) => (
         <span className="text-sm text-gray-600 dark:text-gray-400">{value}</span>
       )
@@ -143,6 +146,8 @@ export default function DocumentTable({
       dataIndex: 'date',
       width: '10%',
       sorter: (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+      mobilePriority: 3,
+      mobileLabel: 'Date',
       render: (value) => (
         <span className="text-sm text-gray-600 dark:text-gray-400">{formatDate(value)}</span>
       )
@@ -153,6 +158,7 @@ export default function DocumentTable({
       dataIndex: 'author',
       width: '10%',
       sorter: (a, b) => a.author.localeCompare(b.author),
+      mobileHidden: true,
       render: (value) => (
         <span className="text-sm text-gray-600 dark:text-gray-400">{value}</span>
       )
@@ -162,6 +168,7 @@ export default function DocumentTable({
       title: 'Tags',
       dataIndex: 'tags',
       width: '12%',
+      mobileHidden: true,
       render: (value: string[]) => (
         <div className="flex flex-wrap gap-1">
           {value.slice(0, 2).map((tag, index) => (
@@ -191,6 +198,7 @@ export default function DocumentTable({
         const bNum = parseFloat(b.version.substring(1));
         return aNum - bNum;
       },
+      mobileHidden: true,
       render: (value) => (
         <span className="text-sm font-mono text-gray-600 dark:text-gray-400">{value}</span>
       )
@@ -202,6 +210,8 @@ export default function DocumentTable({
       width: '10%',
       align: 'center',
       sorter: (a, b) => a.status.localeCompare(b.status),
+      mobilePriority: 2,
+      mobileLabel: 'Status',
       render: (value) => getStatusBadge(value)
     },
     {
@@ -210,6 +220,8 @@ export default function DocumentTable({
       dataIndex: 'actions',
       width: '22%',
       align: 'center',
+      mobilePriority: 4,
+      mobileLabel: 'Actions',
       render: (_, record) => (
         <div className="flex items-center justify-center gap-1 flex-wrap">
           {onPreview && (
@@ -276,7 +288,7 @@ export default function DocumentTable({
       }}
       scroll={{
         x: 1100,
-        y: 500
+        y: 400
       }}
       size="middle"
       bordered={false}
